@@ -1,0 +1,79 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 844x891+990+59
+placeFrames 0.42005813953488375
+set ::ratio 0.42005813953488375
+set ::old_w_leftf 160
+set ::watchlist {
+    pin+mux4.0.sel0
+    pin+axis.x.jog-enable
+    pin+axis.y.jog-counts
+    pin+axis.y.jog-enable
+    pin+axis.z.jog-counts
+    pin+axis.z.jog-enable
+    pin+axisui.jog.a
+    pin+hm2_7i76e.0.gpio.029.in_not
+    pin+mux4.0.sel1
+    pin+hm2_7i76e.0.gpio.023.in_not
+    pin+hm2_7i76e.0.gpio.025.in_not
+    pin+hm2_7i76e.0.gpio.026.in_not
+    pin+hm2_7i76e.0.gpio.012.in
+    pin+hm2_7i76e.0.gpio.012.in_not
+    pin+hm2_7i76e.0.gpio.013.in
+    pin+hm2_7i76e.0.gpio.013.in_not
+    pin+hm2_7i76e.0.gpio.015.in
+    pin+hm2_7i76e.0.gpio.015.in_not
+    pin+hm2_7i76e.0.gpio.016.in
+    pin+hm2_7i76e.0.gpio.016.in_not
+    pin+hm2_7i76e.0.encoder.00.input-a
+    pin+hm2_7i76e.0.encoder.00.input-b
+    pin+hm2_7i76e.0.gpio.028.in
+    pin+hm2_7i76e.0.gpio.028.in_not
+    pin+hm2_7i76e.0.gpio.027.in
+    pin+hm2_7i76e.0.gpio.027.in_not
+    pin+encoder.0.counts
+    sig+mpg-scale
+    sig+mpg-x-en
+    sig+mpg-y-en
+    sig+mpg-z-en
+    sig+mpg-a-en
+    pin+encoder.0.phase-A
+    pin+encoder.0.phase-B
+    pin+encoder.0.counter-mode
+    pin+encoder.0.index-enable
+    pin+encoder.0.counts-latched
+    pin+encoder.0.position
+    pin+encoder.0.position-interpolated
+    pin+encoder.0.position-scale
+    pin+encoder.0.x4-mode
+    pin+encoder.0.reset
+    pin+axisui.abort
+    pin+axisui.error
+    pin+axisui.notifications-clear
+    pin+axisui.notifications-clear-error
+    pin+axisui.notifications-clear-info
+    pin+axisui.resume-inhibit
+    pin+axisui.jog.b
+    pin+axisui.jog.c
+    pin+axisui.jog.increment
+    pin+axisui.jog.u
+    pin+axisui.jog.v
+    pin+axisui.jog.w
+    pin+axisui.jog.x
+    pin+axisui.jog.y
+    pin+axisui.jog.z
+    pin+halui.axis.x.select
+    pin+halui.axis.x.is-selected
+    pin+iocontrol.0.user-enable-out
+    pin+iocontrol.0.emc-enable-in
+    pin+iocontrol.0.user-request-enable
+    pin+hm2_7i76e.0.gpio.049.in_not
+    sig+probe-in
+}
+set ::workmode watchhal
+set ::watchInterval 100
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1

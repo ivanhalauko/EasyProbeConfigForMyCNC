@@ -1,0 +1,41 @@
+loadrt mux4 count=2 #For MPG
+addf mux4.0 servo-thread #For MPG
+
+#---jogwheel signals to mesa encoder - shared MPG---
+
+#  ---mpg signals---
+
+#       for axis x MPG
+
+setp joint.0.jog-vel-mode 0
+setp axis.x.jog-vel-mode 0
+
+#The sets the scale that will be used based on the input to the mux4
+
+setp mux4.0.in0 1
+setp mux4.0.in1 0.1
+setp mux4.0.in2 0.01
+
+#The inputs to the mux4 component
+net scale1 mux4.0.sel0 <= hm2_7i76e.0.7i76.0.0.input-21 #TB5 pin6
+net scale2 mux4.0.sel1 <= hm2_7i76e.0.7i76.0.0.input-22 #TB5 pin7
+
+#The output from the mux4 is sent to each axis jog scale
+net mpg-scale <= mux4.0.out
+net mpg-scale => joint.0.jog-scale => axis.x.jog-scale
+net mpg-scale => joint.1.jog-scale => axis.y.jog-scale
+net mpg-scale => joint.2.jog-scale => axis.z.jog-scale
+net mpg-scale => joint.3.jog-scale => axis.a.jog-scale
+
+#The axis select input
+net mpg-x joint.0.jog-enable <= axis.x.jog-enable <= hm2_7i76e.0.7i76.0.0.input-04 #TB6 pin5
+net mpg-y joint.1.jog-enable <= axis.y.jog-enable <= hm2_7i76e.0.7i76.0.0.input-05 #TB6 pin6
+net mpg-z joint.2.jog-enable <= axis.z.jog-enable <= hm2_7i76e.0.7i76.0.0.input-06 #TB6 pin7
+net mpg-a joint.3.jog-enable <= axis.a.jog-enable <= hm2_7i76e.0.7i76.0.0.input-07 #TB6 pin8
+
+# The encoded output counts to the axis.Only selected axis will move.
+net encoder-counts <= hm2_7i76e.0.7i76.0.0.enc0.count
+net encoder-counts => joint.0.jog-counts => axis.x.jog-counts
+net encoder-counts => joint.1.jog-counts => axis.y.jog-counts
+net encoder-counts => joint.2.jog-counts => axis.z.jog-counts
+net encoder-counts => joint.3.jog-counts => axis.a.jog-counts

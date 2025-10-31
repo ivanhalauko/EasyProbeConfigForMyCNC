@@ -1,0 +1,74 @@
+loadrt mux4 count=2 #For MPG
+loadrt encoder num_chan=1
+addf encoder.update-counters servo-thread
+addf encoder.capture-position servo-thread
+addf mux4.0 servo-thread #For MPG
+
+loadrt or2 count=2
+loadrt and2 count=2 #For E-Stop
+addf or2.0 servo-thread
+addf or2.1 servo-thread
+addf and2.0 servo-thread #For E-Stop
+
+#  ---probe---
+net probe-in motion.probe-input <= hm2_7i76e.0.gpio.049.in_not #P1_21
+
+#  ---estop signals get state from 2 pin IN from MESA Gpio, if one of them 0 then E-stop=>Off---
+# You should uncommet if you need
+#net mpg-estop and2.0.in1 <= hm2_7i76e.0.gpio.037.in_not #P1_4
+#net out_estop and2.0.in0 <= hm2_7i76e.0.gpio.017.in_not #P1_1
+#net estop-ext <= and2.0.out
+
+net mpg-estop or2.0.in1 <= hm2_7i76e.0.gpio.037.in_not #P1_4
+net out_estop or2.0.in0 <= hm2_7i76e.0.gpio.017.in_not #P1_1
+net estop-ext <= or2.0.out
+
+net estop-out <= iocontrol.0.user-enable-out #This UI IO controls from I/o Contol V2 docs
+net estop-ext => iocontrol.0.emc-enable-in
+
+#---jogwheel signals to mesa encoder - shared MPG---
+#  ---mpg signals---
+setp encoder.0.x4-mode 0
+
+#       for axis x MPG
+setp joint.0.jog-vel-mode 0
+setp axis.x.jog-vel-mode 0
+
+#The sets the scale that will be used based on the input to the mux4
+setp mux4.0.in0 1
+setp mux4.0.in1 0.1
+setp mux4.0.in2 0.01
+
+#The inputs to the mux4 component
+net scale1 mux4.0.sel0 <= hm2_7i76e.0.gpio.046.in_not #P1_17 #hm2_7i76e.0.7i76.0.0.input-21 #TB5 pin6
+net scale2 mux4.0.sel1 <= hm2_7i76e.0.gpio.047.in_not #P1_19 #hm2_7i76e.0.7i76.0.0.input-22 #TB5 pin7
+
+#The output from the mux4 is sent to each axis jog scale
+net mpg-scale <= mux4.0.out
+net mpg-scale => joint.0.jog-scale => axis.x.jog-scale
+net mpg-scale => joint.1.jog-scale => axis.y.jog-scale
+net mpg-scale => joint.2.jog-scale => axis.z.jog-scale
+net mpg-scale => joint.3.jog-scale => axis.a.jog-scale
+
+#The axis select input
+net mpg-x-en joint.0.jog-enable <= axis.x.jog-enable <= hm2_7i76e.0.gpio.040.in_not #P1_7 #hm2_7i76e.0.7i76.0.0.input-04 #TB6 pin5
+net mpg-x-en => joint.0.jog-enable => axis.x.jog-enable
+net mpg-x-en => halui.joint.0.select => halui.axis.x.select
+
+net mpg-y-en joint.1.jog-enable <= axis.y.jog-enable <= hm2_7i76e.0.gpio.042.in_not #P1_9 #hm2_7i76e.0.7i76.0.0.input-05 #TB6 pin6
+net mpg-z-en joint.2.jog-enable <= axis.z.jog-enable <= hm2_7i76e.0.gpio.043.in_not #P1_11 #hm2_7i76e.0.7i76.0.0.input-06 #TB6 pin7
+net mpg-a-en joint.3.jog-enable <= axis.a.jog-enable <= hm2_7i76e.0.gpio.048.in_not #P1 21 #hm2_7i76e.0.7i76.0.0.input-07 #TB6 pin8
+
+# The encoded output counts to the axis.Only selected axis will move.
+net mpg-a encoder.0.phase-A <= hm2_7i76e.0.gpio.044.in  #P1_13
+net mpg-b encoder.0.phase-B <= hm2_7i76e.0.gpio.045.in  #P1_15
+net encoder-counts <= encoder.0.counts
+#net encoder-counts <= hm2_7i76e.0.7i76.0.0.enc0.count
+net encoder-counts => joint.0.jog-counts => axis.x.jog-counts
+net encoder-counts => joint.1.jog-counts => axis.y.jog-counts
+net encoder-counts => joint.2.jog-counts => axis.z.jog-counts
+net encoder-counts => joint.3.jog-counts => axis.a.jog-counts
+
+#  ---probe signal---
+
+#net probe-in  =>  motion.probe-input
